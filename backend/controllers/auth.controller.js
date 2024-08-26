@@ -2,7 +2,11 @@ import { User } from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 import { generateTokenAndSetCookies } from "../utils/generateTokenAndSetCookies.js";
-import { sendVerificationEmail, sendWelcomeEmail } from "../mailtrap/emails.js";
+import {
+  sendVerificationEmail,
+  sendWelcomeEmail,
+  sendPasswordResetEmail,
+} from "../mailtrap/emails.js";
 export const signup = async (req, res) => {
   const { email, password, name } = req.body;
   console.log("🚀 ~ signup ~ req.body:", req.body);
@@ -129,5 +133,23 @@ export const forgotPassword = async (req, res) => {
       user.email,
       `${process.env.CLIENT_URL}/reset-password/${resetToken}`
     );
-  } catch (error) {}
+    res.status(200).json({
+      success: true,
+      message: "password reset link sent successfully",
+    });
+  } catch (error) {
+    console.log("error in forgot password", error);
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { password } = req.body;
+  const { token } = req.params;
+
+  try {
+    const user = await User.findOne()
+  } catch (error) {
+    
+  }
 };
